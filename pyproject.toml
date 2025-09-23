@@ -1,0 +1,31 @@
+#########################
+# Project Configuration #
+#########################
+
+# Project name and version needed to run tests
+
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "hdx-scraper-ccvi"
+requires-python = ">=3.13"
+dependencies = [
+  "hdx-python-api>= 6.5.1",
+  "hdx-python-country>= 3.9.8",
+  "hdx-python-utilities>= 3.9.3",
+  "pyarrow",
+]
+
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "pytest-cov"
+]
+dev = ["pre-commit"]
+
+[project.scripts]
+run = "hdx.scraper.ccvi.__main__:main"

@@ -1,0 +1,13 @@
+license_id: cc-by
+methodology: Direct Observational Data/Anecdotal Data
+caveats: Please refer to the [CCVI Technical Documentation](https://climate-conflict.org/www/latest-data/docs/) for the full methodology, including limitations.
+dataset_source: University of the Bundeswehr Munich; Potsdam Institute for Climate Impact Research
+package_creator: HDX Data Systems Team
+private: False
+maintainer: 45dc2728-4dfc-4e6a-afa8-2b1a8ed7623b
+owner_org:  91b12bfd-0e04-4b43-a33d-9f13bd42d3a8
+data_update_frequency: 90
+notes: |
+  The Climate—Conflict—Vulnerability Index (CCVI) maps current global risks by integrating climate and conflict hazards with local vulnerabilities. The index comprises a harmonized set of data layers and a transparent scoring methodology to make regions globally comparable. The data is updated quarterly and gridded to 0.5 degrees (ca. 55km by 55km at the equator).
+
+  The CCVI metrics are organized hierarchically in three pillars — climate, conflict and vulnerability. Each pillar is based on indicators from publicly available sources, which are further grouped into dimensions. Following the IPCC definition, risk metrics are computed as a function of hazards, exposure and vulnerability.

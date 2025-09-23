@@ -1,0 +1,3 @@
+# Collector specific configuration
+qtr_url: "https://climate-conflict.org/www/latest-data/"
+full_url: "https://climate-conflict.org/www/latest-data/full"
