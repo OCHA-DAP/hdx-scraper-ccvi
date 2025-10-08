@@ -69,7 +69,7 @@ def main(
                 )
                 dataset.create_in_hdx(
                     remove_additional_resources=True,
-                    match_resource_order=False,
+                    match_resource_order=True,
                     hxl_update=False,
                     updated_by_script=_UPDATED_BY_SCRIPT,
                     batch=info["batch"],
@@ -79,7 +79,7 @@ def main(
 if __name__ == "__main__":
     facade(
         main,
-        hdx_site="demo",
+        hdx_site="stage",
         user_agent_config_yaml=join(expanduser("~"), ".useragents.yaml"),
         user_agent_lookup=_LOOKUP,
         project_config_yaml=script_dir_plus_file(
