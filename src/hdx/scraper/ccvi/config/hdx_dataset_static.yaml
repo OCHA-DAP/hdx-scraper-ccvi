@@ -11,3 +11,5 @@ notes: |
   The Climate—Conflict—Vulnerability Index (CCVI) maps current global risks by integrating climate and conflict hazards with local vulnerabilities. The index comprises a harmonized set of data layers and a transparent scoring methodology to make regions globally comparable. The data is updated quarterly and gridded to 0.5 degrees (ca. 55km by 55km at the equator).
 
   The CCVI metrics are organized hierarchically in three pillars — climate, conflict and vulnerability. Each pillar is based on indicators from publicly available sources, which are further grouped into dimensions. Following the IPCC definition, risk metrics are computed as a function of hazards, exposure and vulnerability.
+
+  There are two sets of resources. One smaller set contains only the data from the latest quarter in tsv format, while the full dataset includes historical time series and reference data in parquet format.

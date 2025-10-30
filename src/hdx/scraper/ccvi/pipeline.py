@@ -2,6 +2,7 @@
 """Ccvi scraper"""
 
 import logging
+from os.path import splitext
 from typing import Optional
 from zipfile import ZipFile
 
@@ -41,14 +42,59 @@ class Pipeline:
                 "title": dataset_title,
             }
         )
+        dataset.add_tags(dataset_tags)
+        dataset.set_subnational(True)
+        dataset.add_other_location("world")
 
-        full_path = self._retriever.download_file(self._configuration["full_url"])
-        quarter_max = None
-        year_max = None
+        resources = []
+        qtr_path = self._retriever.download_file(
+            self._configuration["qtr_url"], filename="latest_data.zip"
+        )
+        readme_resource = None
+        with ZipFile(qtr_path, "r") as zipfile:
+            for fileinfo in sorted(
+                zipfile.infolist(), key=lambda x: x.file_size, reverse=True
+            ):
+                filename = fileinfo.filename
+                inputpath = zipfile.extract(filename, path=self._tempdir)
+                if filename == "README.md":
+                    readme_resource = Resource(
+                        {
+                            "name": f"LAST_QTR_{filename}",
+                            "description": "File structures of last quarter dataset.",
+                        }
+                    )
+                    readme_resource.set_format("txt")
+                    readme_resource.set_file_to_upload(inputpath)
+                else:
+                    resource = Resource(
+                        {
+                            "name": f"last_qtr_{filename}",
+                            "description": "Dataset covers only the latest quarter. See LAST_QTR_README.md for file structure.",
+                        }
+                    )
+                    file_format = splitext(filename)[1]
+                    resource.set_format(file_format[1:])
+                    resource.set_file_to_upload(inputpath)
+                    resources.append(resource)
+        resources.append(readme_resource)
+        full_path = self._retriever.download_file(
+            self._configuration["full_url"], filename="latest_data_full.zip"
+        )
         with ZipFile(full_path, "r") as zipfile:
-            for filename in zipfile.namelist():
+            parquets = sorted(
+                [
+                    x
+                    for x in zipfile.infolist()
+                    if splitext(x.filename)[1] == ".parquet"
+                ],
+                key=lambda x: x.file_size,
+                reverse=True,
+            )
+            for fileinfo in parquets:
+                filename = fileinfo.filename
+                inputpath = zipfile.extract(filename, path=self._tempdir)
                 if "exposure" in filename:
-                    inputpath = zipfile.extract(filename, path=self._tempdir)
                     date_columns = parquet.read_table(
                         inputpath, columns=["year", "quarter"]
                     )
@@ -66,30 +112,43 @@ class Pipeline:
                     date_start = get_quarter_start(year_min, quarter_min)
                     date_end = get_quarter_end(year_max, quarter_max)
                     dataset.set_time_period(date_start, date_end)
-
-        dataset.add_tags(dataset_tags)
-        # Only if needed
-        dataset.set_subnational(True)
-        dataset.add_other_location("world")
-
-        qtr_path = self._retriever.download_file(self._configuration["qtr_url"])
-        resource = Resource(
-            {
-                "name": f"CCVI Q{quarter_max} {year_max}",
-                "description": "Contains only the data from the latest quarter in tsv format.",
-            }
-        )
-        resource.set_format("tsv")
-        resource.set_file_to_upload(qtr_path)
-        dataset.add_update_resource(resource)
-
-        resource = Resource(
-            {
-                "name": "CCVI Full Dataset",
-                "description": "Full dataset including historical time series and reference data in parquet format.",
-            }
-        )
-        resource.set_format("parquet")
-        resource.set_file_to_upload(full_path)
-        dataset.add_update_resource(resource)
+                resource = Resource(
+                    {
+                        "name": filename,
+                        "description": "Full dataset including historical time series and reference data. See FULL_README.md for file structure.",
+                    }
+                )
+                file_format = splitext(filename)[1]
+                resource.set_format(file_format[1:])
+                resource.set_file_to_upload(inputpath)
+                resources.append(resource)
+            for fileinfo in sorted(
+                zipfile.infolist(), key=lambda x: x.file_size, reverse=True
+            ):
+                filename = fileinfo.filename
+                file_format = splitext(filename)[1]
+                if file_format == "parquet":
+                    continue
+                inputpath = zipfile.extract(filename, path=self._tempdir)
+                if filename == "README.md":
+                    readme_resource = Resource(
+                        {
+                            "name": f"FULL_{filename}",
+                            "description": "File structures of full dataset.",
+                        }
+                    )
+                    readme_resource.set_format("txt")
+                    readme_resource.set_file_to_upload(inputpath)
+                else:
+                    resource = Resource(
+                        {
+                            "name": filename,
+                            "description": "Full dataset including historical time series and reference data. See FULL_README.md for file structure.",
+                        }
+                    )
+                    resource.set_format(file_format[1:])
+                    resource.set_file_to_upload(inputpath)
+                    resources.append(resource)
+        resources.append(readme_resource)
+        dataset.add_update_resources(resources)
         return dataset

@@ -5,7 +5,10 @@ from hdx.api.configuration import Configuration
 from hdx.api.locations import Locations
 from hdx.data.vocabulary import Vocabulary
 from hdx.location.country import Country
+from hdx.utilities.path import script_dir_plus_file
 from hdx.utilities.useragent import UserAgent
+
+from hdx.scraper.ccvi.pipeline import Pipeline
 
 
 @pytest.fixture(scope="session")
@@ -19,17 +22,14 @@ def input_dir(fixtures_dir):
 
 
 @pytest.fixture(scope="session")
-def config_dir(fixtures_dir):
-    return join("src", "hdx", "scraper", "ccvi", "config")
-
-
-@pytest.fixture(scope="session")
-def configuration(config_dir):
+def configuration():
     UserAgent.set_global("test")
     Configuration._create(
         hdx_read_only=True,
         hdx_site="prod",
-        project_config_yaml=join(config_dir, "project_configuration.yaml"),
+        project_config_yaml=script_dir_plus_file(
+            join("config", "project_configuration.yaml"), Pipeline
+        ),
     )
     # Change locations below to match those needed in tests
     Locations.set_validlocations(
