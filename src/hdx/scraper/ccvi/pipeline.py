@@ -47,10 +47,14 @@ class Pipeline:
         dataset.add_other_location("world")
 
         resources = []
-        qtr_path = self._retriever.download_file(self._configuration["qtr_url"])
+        qtr_path = self._retriever.download_file(
+            self._configuration["qtr_url"], filename="latest_data.zip"
+        )
         readme_resource = None
         with ZipFile(qtr_path, "r") as zipfile:
-            for fileinfo in sorted(zipfile.infolist(), key=lambda x: x.file_size, reverse=True):
+            for fileinfo in sorted(
+                zipfile.infolist(), key=lambda x: x.file_size, reverse=True
+            ):
                 filename = fileinfo.filename
                 inputpath = zipfile.extract(filename, path=self._tempdir)
                 if filename == "README.md":
@@ -74,9 +78,19 @@ class Pipeline:
                     resource.set_file_to_upload(inputpath)
                     resources.append(resource)
         resources.append(readme_resource)
-        full_path = self._retriever.download_file(self._configuration["full_url"])
+        full_path = self._retriever.download_file(
+            self._configuration["full_url"], filename="latest_data_full.zip"
+        )
         with ZipFile(full_path, "r") as zipfile:
-            parquets = sorted([x for x in zipfile.infolist() if splitext(x.filename)[1]==".parquet"], key=lambda x: x.file_size, reverse=True)
+            parquets = sorted(
+                [
+                    x
+                    for x in zipfile.infolist()
+                    if splitext(x.filename)[1] == ".parquet"
+                ],
+                key=lambda x: x.file_size,
+                reverse=True,
+            )
             for fileinfo in parquets:
                 filename = fileinfo.filename
                 inputpath = zipfile.extract(filename, path=self._tempdir)
@@ -108,7 +122,9 @@ class Pipeline:
                 resource.set_format(file_format[1:])
                 resource.set_file_to_upload(inputpath)
                 resources.append(resource)
-            for fileinfo in sorted(zipfile.infolist(), key=lambda x: x.file_size, reverse=True):
+            for fileinfo in sorted(
+                zipfile.infolist(), key=lambda x: x.file_size, reverse=True
+            ):
                 filename = fileinfo.filename
                 file_format = splitext(filename)[1]
                 if file_format == "parquet":
