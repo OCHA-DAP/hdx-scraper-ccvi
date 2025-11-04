@@ -161,24 +161,6 @@ class TestPipeline:
                     {
                         "description": "Full dataset including historical time series and reference "
                         "data. See FULL_README.md for file structure.",
-                        "format": "parquet",
-                        "name": "exposure_layers.parquet",
-                    },
-                    {
-                        "description": "Full dataset including historical time series and reference "
-                        "data. See FULL_README.md for file structure.",
-                        "format": "parquet",
-                        "name": "base_grid.parquet",
-                    },
-                    {
-                        "description": "Full dataset including historical time series and reference "
-                        "data. See FULL_README.md for file structure.",
-                        "format": "parquet",
-                        "name": "vul_country_raw.parquet",
-                    },
-                    {
-                        "description": "Full dataset including historical time series and reference "
-                        "data. See FULL_README.md for file structure.",
                         "format": "tsv",
                         "name": "ccvi-structure.tsv",
                     },
@@ -187,24 +169,6 @@ class TestPipeline:
                         "data. See FULL_README.md for file structure.",
                         "format": "tsv",
                         "name": "ccvi-data-sources.tsv",
-                    },
-                    {
-                        "description": "Full dataset including historical time series and reference "
-                        "data. See FULL_README.md for file structure.",
-                        "format": "parquet",
-                        "name": "data_recency.parquet",
-                    },
-                    {
-                        "description": "Full dataset including historical time series and reference "
-                        "data. See FULL_README.md for file structure.",
-                        "format": "parquet",
-                        "name": "index-full.parquet",
-                    },
-                    {
-                        "description": "Full dataset including historical time series and reference "
-                        "data. See FULL_README.md for file structure.",
-                        "format": "parquet",
-                        "name": "ccvi_scores.parquet",
                     },
                     {
                         "description": "File structures of full dataset.",

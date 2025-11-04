@@ -127,7 +127,7 @@ class Pipeline:
             ):
                 filename = fileinfo.filename
                 file_format = splitext(filename)[1]
-                if file_format == "parquet":
+                if file_format == ".parquet":
                     continue
                 inputpath = zipfile.extract(filename, path=self._tempdir)
                 if filename == "README.md":
